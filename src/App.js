@@ -8,7 +8,7 @@ import {Dashboard} from "./features/Dashboard/dashboard";
 import { Link, Route, Switch, Redirect, BrowserRouter as Router } from 'react-router-dom';
 import AuthRoute from './features/AuthRoute';
 import NotFound from "./features/Notfound";
-import {Tasks} from "./features/Dashboard/addMentor/tasks";
+import {Tasks} from "./features/Dashboard/addTasks/tasks";
 function App() {
   const authenticated = useSelector(state=> {return state.login.loggedIn});
   return (
