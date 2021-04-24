@@ -1,57 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React,{useState} from 'react';
+import {Login} from './features/Admin/Login';
 import './App.css';
-
+import { useSelector, useDispatch } from 'react-redux';
+import {history} from "../src/app/store";
+import { ConnectedRouter } from 'connected-react-router';
+import {Dashboard} from "./features/Dashboard/dashboard";
+import { Link, Route, Switch, Redirect, BrowserRouter as Router } from 'react-router-dom';
+import AuthRoute from './features/AuthRoute';
+import NotFound from "./features/Notfound";
+import {Tasks} from "./features/Dashboard/addMentor/tasks";
 function App() {
+  const authenticated = useSelector(state=> {return state.login.loggedIn});
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+      <ConnectedRouter history={history}>
+        <Switch>
+            <Redirect exact from="/" to="login" />
+          <Route
+              path="/login"
+              render={props => (
+                  <Login authenticated={authenticated}  {...props}/>
+              )}
+          />
+          <AuthRoute
+              authenticated={authenticated}
+              path="/Dashboard"
+              render={props => <Dashboard {...props} />}
+          />
+            <AuthRoute
+                authenticated={authenticated}
+                path="/task/:id?"
+                render={props => <Tasks {...props} />}
+            />
+          <Route component={NotFound} />
+        </Switch>
+      </ConnectedRouter>
   );
 }
 
